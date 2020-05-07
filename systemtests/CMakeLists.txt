@@ -171,6 +171,14 @@ macro(handle_python_plugin_modules test_name)
     )
   endif()
 
+  if(${test_name} STREQUAL python-fd-plugin-split-jobs-test)
+    list(APPEND FD_PYMODULES_TO_LINK_TO_SRC bareos-fd-split-jobs.py
+                BareosFdPluginLocalFileset.py
+		BareosFdPluginSplitJobs.py
+    )
+  endif()
+
+
   # still missing: filed/BareosFdPluginLDAP.py filed/bareos-fd-ldap.py
 
   if(NOT EXISTS ${python_plugin_module_src_test_dir})

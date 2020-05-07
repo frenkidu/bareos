@@ -114,6 +114,8 @@ set(PYFILES
     BareosFdPluginOvirt.py
     bareos-fd-percona-xtrabackup.py
     BareosFdPluginPerconaXtraBackup.py
+    BareosFdPluginSplitJobs.py
+    bareos-fd-split-jobs.py
 )
 
 install(
