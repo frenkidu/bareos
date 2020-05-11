@@ -646,7 +646,13 @@ set(SYSTEM_TESTS_DISABLED # initially empty
 set(glusterfs_uri "" CACHE STRING "URI for GlusterFS backend test")
 mark_as_advanced(glusterfs_uri)
 
-if(SD_GFAPI_DIR_TO_TEST AND glusterfs_uri) 
+if(TARGET bareossd-droplet)
+  list(APPEND SYSTEM_TESTS backup-bareos-droplet-s3-test)
+else()
+  list(APPEND SYSTEM_TESTS_DISABLED backup-bareos-droplet-s3-test)
+endif()
+
+if(SD_GFAPI_DIR_TO_TEST AND glusterfs_uri)
   list(APPEND SYSTEM_TESTS glusterfs-backend)
 else()
   list(APPEND SYSTEM_TESTS_DISABLED glusterfs-backend)
