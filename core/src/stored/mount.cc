@@ -3,7 +3,7 @@
 
    Copyright (C) 2002-2012 Free Software Foundation Europe e.V.
    Copyright (C) 2011-2012 Planets Communications B.V.
-   Copyright (C) 2013-2019 Bareos GmbH & Co. KG
+   Copyright (C) 2013-2020 Bareos GmbH & Co. KG
 
    This program is Free Software; you can redistribute it and/or
    modify it under the terms of version three of the GNU Affero General Public
@@ -605,7 +605,7 @@ bool DeviceControlRecord::DoUnload()
 {
   DeviceControlRecord* dcr = this;
 
-  if (GeneratePluginEvent(jcr, bsdEventVolumeUnload, dcr) != bRC_OK) {
+  if (GeneratePluginEvent(jcr, bSdEventVolumeUnload, dcr) != bRC_OK) {
     return false;
   }
 
@@ -631,7 +631,7 @@ bool DeviceControlRecord::DoLoad(bool IsWriting)
     retval = true;
   }
 
-  if (GeneratePluginEvent(jcr, bsdEventVolumeLoad, dcr) != bRC_OK) {
+  if (GeneratePluginEvent(jcr, bSdEventVolumeLoad, dcr) != bRC_OK) {
     retval = false;
   }
 
@@ -873,7 +873,7 @@ void DeviceControlRecord::ReleaseVolume()
 
   UnloadAutochanger(dcr, -1);
 
-  GeneratePluginEvent(jcr, bsdEventVolumeUnload, dcr);
+  GeneratePluginEvent(jcr, bSdEventVolumeUnload, dcr);
 
   if (WroteVol) {
     Jmsg0(jcr, M_ERROR, 0, _("Hey!!!!! WroteVol non-zero !!!!!\n"));

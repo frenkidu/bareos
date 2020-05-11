@@ -2,7 +2,7 @@
    BAREOS® - Backup Archiving REcovery Open Sourced
 
    Copyright (C) 2000-2012 Free Software Foundation Europe e.V.
-   Copyright (C) 2016-2019 Bareos GmbH & Co. KG
+   Copyright (C) 2016-2020 Bareos GmbH & Co. KG
 
    This program is Free Software; you can redistribute it and/or
    modify it under the terms of version three of the GNU Affero General Public
@@ -885,7 +885,7 @@ static bool ReserveDeviceForRead(DeviceControlRecord* dcr)
   /*
    * Note: on failure this returns jcr->errmsg properly edited
    */
-  if (GeneratePluginEvent(jcr, bsdEventDeviceReserve, dcr) != bRC_OK) {
+  if (GeneratePluginEvent(jcr, bSdEventDeviceReserve, dcr) != bRC_OK) {
     QueueReserveMessage(jcr);
     goto bail_out;
   }
@@ -962,7 +962,7 @@ static bool ReserveDeviceForAppend(DeviceControlRecord* dcr,
   /*
    * Note: on failure this returns jcr->errmsg properly edited
    */
-  if (GeneratePluginEvent(jcr, bsdEventDeviceReserve, dcr) != bRC_OK) {
+  if (GeneratePluginEvent(jcr, bSdEventDeviceReserve, dcr) != bRC_OK) {
     QueueReserveMessage(jcr);
     goto bail_out;
   }

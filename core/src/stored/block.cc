@@ -3,7 +3,7 @@
 
    Copyright (C) 2001-2012 Free Software Foundation Europe e.V.
    Copyright (C) 2011-2012 Planets Communications B.V.
-   Copyright (C) 2013-2018 Bareos GmbH & Co. KG
+   Copyright (C) 2013-2020 Bareos GmbH & Co. KG
 
    This program is Free Software; you can redistribute it and/or
    modify it under the terms of version three of the GNU Affero General Public
@@ -90,8 +90,8 @@ void DumpBlock(DeviceBlock* b, const char* msg)
     return;
   }
 
-  BlockCheckSum =
-      crc32_fast((uint8_t*)b->buf + BLKHDR_CS_LENGTH, block_len - BLKHDR_CS_LENGTH);
+  BlockCheckSum = crc32_fast((uint8_t*)b->buf + BLKHDR_CS_LENGTH,
+                             block_len - BLKHDR_CS_LENGTH);
   Pmsg6(000,
         _("Dump block %s %x: size=%d BlkNum=%d\n"
           "               Hdrcksum=%x cksum=%x\n"),
@@ -223,7 +223,7 @@ static uint32_t SerBlockHeader(DeviceBlock* block, bool DoChecksum)
    */
   if (DoChecksum) {
     CheckSum = crc32_fast((uint8_t*)block->buf + BLKHDR_CS_LENGTH,
-                      block_len - BLKHDR_CS_LENGTH);
+                          block_len - BLKHDR_CS_LENGTH);
   }
   Dmsg1(1390, "ser_bloc_header: checksum=%x\n", CheckSum);
   SerBegin(block->buf, BLKHDR2_LENGTH);
@@ -340,7 +340,7 @@ static inline bool unSerBlockHeader(JobControlRecord* jcr,
         block_len);
   if (block_len <= block->read_len && dev->DoChecksum()) {
     BlockCheckSum = crc32_fast((uint8_t*)block->buf + BLKHDR_CS_LENGTH,
-                           block_len - BLKHDR_CS_LENGTH);
+                               block_len - BLKHDR_CS_LENGTH);
     if (BlockCheckSum != CheckSum) {
       dev->dev_errno = EIO;
       Mmsg6(dev->errmsg,
@@ -823,7 +823,7 @@ bool DeviceControlRecord::WriteBlockToDev()
             be.bstrerror());
     }
 
-    GeneratePluginEvent(jcr, bsdEventWriteError, dcr);
+    GeneratePluginEvent(jcr, bSdEventWriteError, dcr);
 
     if (dev->dev_errno != ENOSPC) { Jmsg(jcr, M_ERROR, 0, "%s", dev->errmsg); }
 
@@ -1056,7 +1056,7 @@ reread:
           dev->fd(), dev->file, dev->block_num, dev->print_name(),
           be.bstrerror());
 
-    GeneratePluginEvent(jcr, bsdEventReadError, dcr);
+    GeneratePluginEvent(jcr, bSdEventReadError, dcr);
 
     Jmsg(jcr, M_ERROR, 0, "%s", dev->errmsg);
     if (device->eof_on_error_is_eot && dev->AtEof()) {

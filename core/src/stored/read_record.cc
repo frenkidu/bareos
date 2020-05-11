@@ -3,7 +3,7 @@
 
    Copyright (C) 2002-2010 Free Software Foundation Europe e.V.
    Copyright (C) 2011-2012 Planets Communications B.V.
-   Copyright (C) 2013-2019 Bareos GmbH & Co. KG
+   Copyright (C) 2013-2020 Bareos GmbH & Co. KG
 
    This program is Free Software; you can redistribute it and/or
    modify it under the terms of version three of the GNU Affero General Public
@@ -346,8 +346,8 @@ bool ReadNextRecordFromBlock(DeviceControlRecord* dcr,
      * Apply BootStrapRecord filter
      */
     if (jcr->impl->read_session.bsr) {
-      rec->match_stat = MatchBsr(jcr->impl->read_session.bsr, rec,
-                                 &dev->VolHdr, &rctx->sessrec, jcr);
+      rec->match_stat = MatchBsr(jcr->impl->read_session.bsr, rec, &dev->VolHdr,
+                                 &rctx->sessrec, jcr);
       if (rec->match_stat == -1) { /* no more possible matches */
         *done = true;              /* all items found, stop */
         Dmsg2(debuglevel, "All done=(file:block) %u:%u\n", dev->file,
@@ -481,7 +481,7 @@ bool ReadRecords(DeviceControlRecord* dcr,
          * GeneratePluginEvent() the reverse argument so it knows that we want
          * the plugins to be called in that order.
          */
-        if (GeneratePluginEvent(jcr, bsdEventReadRecordTranslation, dcr,
+        if (GeneratePluginEvent(jcr, bSdEventReadRecordTranslation, dcr,
                                 true) != bRC_OK) {
           ok = false;
           continue;
@@ -489,7 +489,7 @@ bool ReadRecords(DeviceControlRecord* dcr,
 
         /*
          * The record got translated when we got an after_rec pointer after
-         * calling the bsdEventReadRecordTranslation plugin event. If no
+         * calling the bSdEventReadRecordTranslation plugin event. If no
          * translation has taken place we just point the rec pointer to same
          * DeviceRecord as in the before_rec pointer.
          */

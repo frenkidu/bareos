@@ -2,7 +2,7 @@
    BAREOS® - Backup Archiving REcovery Open Sourced
 
    Copyright (C) 2001-2012 Free Software Foundation Europe e.V.
-   Copyright (C) 2016-2019 Bareos GmbH & Co. KG
+   Copyright (C) 2016-2020 Bareos GmbH & Co. KG
 
    This program is Free Software; you can redistribute it and/or
    modify it under the terms of version three of the GNU Affero General Public
@@ -657,14 +657,14 @@ bool DeviceControlRecord::WriteRecord()
    */
   before_rec = rec;
   after_rec = NULL;
-  if (GeneratePluginEvent(jcr, bsdEventWriteRecordTranslation, this) !=
+  if (GeneratePluginEvent(jcr, bSdEventWriteRecordTranslation, this) !=
       bRC_OK) {
     goto bail_out;
   }
 
   /*
    * The record got translated when we got an after_rec pointer after calling
-   * the bsdEventWriteRecordTranslation plugin event. If no translation has
+   * the bSdEventWriteRecordTranslation plugin event. If no translation has
    * taken place we just point the after_rec pointer to same DeviceRecord as in
    * the before_rec pointer.
    */
@@ -685,8 +685,7 @@ bool DeviceControlRecord::WriteRecord()
   }
 
   jcr->JobBytes += after_rec->data_len; /* increment bytes this job */
-  if (jcr->impl->RemainingQuota &&
-      jcr->JobBytes > jcr->impl->RemainingQuota) {
+  if (jcr->impl->RemainingQuota && jcr->JobBytes > jcr->impl->RemainingQuota) {
     Jmsg0(jcr, M_FATAL, 0, _("Quota Exceeded. Job Terminated.\n"));
     goto bail_out;
   }

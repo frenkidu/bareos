@@ -3,7 +3,7 @@
 
    Copyright (C) 2006-2012 Free Software Foundation Europe e.V.
    Copyright (C) 2011-2012 Planets Communications B.V.
-   Copyright (C) 2013-2017 Bareos GmbH & Co. KG
+   Copyright (C) 2013-2020 Bareos GmbH & Co. KG
 
    This program is Free Software; you can redistribute it and/or
    modify it under the terms of version three of the GNU Affero General Public
@@ -225,14 +225,14 @@ static bool CloneRecordInternally(DeviceControlRecord* dcr, DeviceRecord* rec)
    */
   jcr->impl->dcr->before_rec = rec;
   jcr->impl->dcr->after_rec = NULL;
-  if (GeneratePluginEvent(jcr, bsdEventWriteRecordTranslation,
+  if (GeneratePluginEvent(jcr, bSdEventWriteRecordTranslation,
                           jcr->impl->dcr) != bRC_OK) {
     goto bail_out;
   }
 
   /*
    * The record got translated when we got an after_rec pointer after calling
-   * the bsdEventWriteRecordTranslation plugin event. If no translation has
+   * the bSdEventWriteRecordTranslation plugin event. If no translation has
    * taken place we just point the after_rec pointer to same DeviceRecord as in
    * the before_rec pointer.
    */
@@ -551,8 +551,7 @@ bool DoMacRun(JobControlRecord* jcr)
     }
 
     Dmsg2(200, "===== After acquire pos %u:%u\n",
-          jcr->impl->read_dcr->dev->file,
-          jcr->impl->read_dcr->dev->block_num);
+          jcr->impl->read_dcr->dev->file, jcr->impl->read_dcr->dev->block_num);
 
     jcr->sendJobStatus(JS_Running);
 
@@ -798,7 +797,7 @@ bail_out:
   DequeueMessages(jcr); /* send any queued messages */
   if (ok) { jcr->setJobStatus(JS_Terminated); }
 
-  GeneratePluginEvent(jcr, bsdEventJobEnd);
+  GeneratePluginEvent(jcr, bSdEventJobEnd);
   dir->fsend(Job_end, jcr->Job, jcr->JobStatus, jcr->JobFiles,
              edit_uint64(jcr->JobBytes, ec1), jcr->JobErrors);
   Dmsg4(100, Job_end, jcr->Job, jcr->JobStatus, jcr->JobFiles, ec1);

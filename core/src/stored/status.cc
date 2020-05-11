@@ -3,7 +3,7 @@
 
    Copyright (C) 2003-2012 Free Software Foundation Europe e.V.
    Copyright (C) 2011-2012 Planets Communications B.V.
-   Copyright (C) 2013-2019 Bareos GmbH & Co. KG
+   Copyright (C) 2013-2020 Bareos GmbH & Co. KG
 
    This program is Free Software; you can redistribute it and/or
    modify it under the terms of version three of the GNU Affero General Public
@@ -190,7 +190,7 @@ static bool NeedToListDevice(const char* devicenames, DeviceResource* device)
 static void trigger_device_status_hook(JobControlRecord* jcr,
                                        DeviceResource* device,
                                        StatusPacket* sp,
-                                       bsdEventType eventType)
+                                       bSdEventType eventType)
 {
   bsdDevStatTrig dst;
 
@@ -313,7 +313,7 @@ static void ListDevices(JobControlRecord* jcr,
       }
 
       get_device_specific_status(device, sp);
-      trigger_device_status_hook(jcr, device, sp, bsdEventDriveStatus);
+      trigger_device_status_hook(jcr, device, sp, bSdEventDriveStatus);
 
       SendBlockedStatus(dev, sp);
 
@@ -347,7 +347,7 @@ static void ListDevices(JobControlRecord* jcr,
                  edit_uint64_with_commas(dev->block_num, b2));
       sp->send(msg, len);
 
-      trigger_device_status_hook(jcr, device, sp, bsdEventVolumeStatus);
+      trigger_device_status_hook(jcr, device, sp, bSdEventVolumeStatus);
     } else {
       if (dev) {
         len = Mmsg(msg, _("\nDevice %s is not open.\n"), dev->print_name());
