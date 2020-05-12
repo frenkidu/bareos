@@ -121,36 +121,32 @@ macro(CheckForEnabledAndDisabledListEntry TEST_NAME_TO_CHECK)
   endif()
 endmacro()
 
-
 # set the data encryption and signature keys
-set(pki_keypair
-  ${CMAKE_CURRENT_SOURCE_DIR}/pki/fd.pem)
-set(pki_master_key
-  ${CMAKE_CURRENT_SOURCE_DIR}/pki/master.cert)
+set(pki_keypair ${CMAKE_CURRENT_SOURCE_DIR}/pki/fd.pem)
+set(pki_master_key ${CMAKE_CURRENT_SOURCE_DIR}/pki/master.cert)
 
 # set the tls ca keys
-set(tls_ca_certificate
-  ${CMAKE_CURRENT_SOURCE_DIR}/tls/bareos-ca.pem)
+set(tls_ca_certificate ${CMAKE_CURRENT_SOURCE_DIR}/tls/bareos-ca.pem)
 
 set(tls_fd_certificate
-  ${CMAKE_CURRENT_SOURCE_DIR}/tls/client1.bareos.org-cert.pem)
-set(tls_fd_key
-  ${CMAKE_CURRENT_SOURCE_DIR}/tls/client1.bareos.org-key.pem)
+    ${CMAKE_CURRENT_SOURCE_DIR}/tls/client1.bareos.org-cert.pem
+)
+set(tls_fd_key ${CMAKE_CURRENT_SOURCE_DIR}/tls/client1.bareos.org-key.pem)
 
 set(tls_sd_certificate
-  ${CMAKE_CURRENT_SOURCE_DIR}/tls/bareos-sd1.bareos.org-cert.pem)
-set(tls_sd_key
-  ${CMAKE_CURRENT_SOURCE_DIR}/tls/bareos-sd1.bareos.org-key.pem)
+    ${CMAKE_CURRENT_SOURCE_DIR}/tls/bareos-sd1.bareos.org-cert.pem
+)
+set(tls_sd_key ${CMAKE_CURRENT_SOURCE_DIR}/tls/bareos-sd1.bareos.org-key.pem)
 
 set(tls_dir_certificate
-  ${CMAKE_CURRENT_SOURCE_DIR}/tls/bareos-dir.bareos.org-cert.pem)
-set(tls_dir_key
-  ${CMAKE_CURRENT_SOURCE_DIR}/tls/bareos-dir.bareos.org-key.pem)
+    ${CMAKE_CURRENT_SOURCE_DIR}/tls/bareos-dir.bareos.org-cert.pem
+)
+set(tls_dir_key ${CMAKE_CURRENT_SOURCE_DIR}/tls/bareos-dir.bareos.org-key.pem)
 
 set(tls_con_certificate
-  ${CMAKE_CURRENT_SOURCE_DIR}/tls/console.bareos.org-cert.pem)
-set(tls_con_key
-  ${CMAKE_CURRENT_SOURCE_DIR}/tls/console.bareos.org-key.pem)
+    ${CMAKE_CURRENT_SOURCE_DIR}/tls/console.bareos.org-cert.pem
+)
+set(tls_con_key ${CMAKE_CURRENT_SOURCE_DIR}/tls/console.bareos.org-key.pem)
 
 macro(link_binaries_to_test_to_current_sbin_dir_with_individual_filename)
   foreach(binary_name ${ALL_BINARIES_BEING_USED_BY_SYSTEMTESTS})
@@ -158,7 +154,7 @@ macro(link_binaries_to_test_to_current_sbin_dir_with_individual_filename)
     string(REPLACE "-" "_" binary_name ${binary_name})
     string(TOUPPER ${binary_name} binary_name_upcase)
     string(CONCAT bareos_XXX_binary ${binary_name_upcase} "_BINARY")
-    #message (STATUS "${bareos_XXX_binary}")
+    # message (STATUS "${bareos_XXX_binary}")
     set(${bareos_XXX_binary} ${CURRENT_SBIN_DIR}/${binary_name}-${TEST_NAME})
     # message( "creating symlink ${${bareos_XXX_binary}}  ->
     # ${${binary_name_to_test_upcase}}" )
@@ -459,7 +455,9 @@ configurefilestosystemtest("systemtests" "data" "*.tgz" COPYONLY "")
 configurefilestosystemtest("systemtests" "data" "*.gz" COPYONLY "")
 
 configurefilestosystemtest("systemtests" "scripts" "functions" @ONLY "")
-configurefilestosystemtest("systemtests" "scripts" "reload_test_functions" @ONLY "")
+configurefilestosystemtest(
+  "systemtests" "scripts" "reload_test_functions" @ONLY ""
+)
 configurefilestosystemtest("systemtests" "scripts" "cleanup" @ONLY "")
 configurefilestosystemtest("systemtests" "scripts" "setup" @ONLY "")
 configurefilestosystemtest(
@@ -532,16 +530,22 @@ set(SYSTEM_TESTS
 set(SYSTEM_TESTS_DISABLED # initially empty
 )
 
-set(glusterfs_uri "" CACHE STRING "URI for GlusterFS backend test")
+set(glusterfs_uri
+    ""
+    CACHE STRING "URI for GlusterFS backend test"
+)
 mark_as_advanced(glusterfs_uri)
 
-if(SD_GFAPI_DIR_TO_TEST AND glusterfs_uri) 
+if(SD_GFAPI_DIR_TO_TEST AND glusterfs_uri)
   list(APPEND SYSTEM_TESTS glusterfs-backend)
 else()
   list(APPEND SYSTEM_TESTS_DISABLED glusterfs-backend)
 endif()
 
-if(mysql AND postgresql AND dynamic-cats-backends)
+if(mysql
+   AND postgresql
+   AND dynamic-cats-backends
+)
   list(APPEND SYSTEM_TESTS "dbcopy-mysql-postgresql-test")
 else()
   list(APPEND SYSTEM_TESTS_DISABLED "dbcopy-mysql-postgresql-test")
@@ -558,7 +562,10 @@ endif()
 bareosfindlibrary("gtest")
 if(GTEST_FOUND AND NOT RUN_SYSTEMTESTS_ON_INSTALLED_FILES)
   list(APPEND SYSTEM_TESTS "catalog")
-  message(STATUS "adding catalog test as gtest was found and not testing installed files")
+  message(
+    STATUS
+      "adding catalog test as gtest was found and not testing installed files"
+  )
 else()
   list(APPEND SYSTEM_TESTS_DISABLED "catalog")
   message(STATUS "disabling catalog test as gtest was not found")
@@ -678,18 +685,13 @@ if(ENABLE_WEBUI_SELENIUM_TEST)
 else()
   set(WEBUI_SELENIUM_TESTS)
   foreach(TEST_NAME_DISABLED ${AVAILABLE_WEBUI_SELENIUM_TESTS})
-    add_test(
-      NAME ${WEBUI_TEST_PREFIX}${TEST_NAME_DISABLED}
-      COMMAND empty_command
+    add_test(NAME ${WEBUI_TEST_PREFIX}${TEST_NAME_DISABLED}
+             COMMAND empty_command
     )
     set_tests_properties(
-      ${WEBUI_TEST_PREFIX}${TEST_NAME_DISABLED}
-      PROPERTIES DISABLED true
+      ${WEBUI_TEST_PREFIX}${TEST_NAME_DISABLED} PROPERTIES DISABLED true
     )
-    message(
-      STATUS
-        "Disabled test: ${WEBUI_TEST_PREFIX}${TEST_NAME_DISABLED}"
-    )
+    message(STATUS "Disabled test: ${WEBUI_TEST_PREFIX}${TEST_NAME_DISABLED}")
   endforeach()
 endif()
 
@@ -703,25 +705,21 @@ else()
   set(TEST_INFO_TEXT "running system tests on the sourcetree")
 endif()
 
-
 foreach(TEST_NAME ${SYSTEM_TESTS})
-  message(
-    STATUS
-      "Configuring test: ${SYSTEMTEST_PREFIX}${TEST_NAME}"
-  )
+  message(STATUS "Configuring test: ${SYSTEMTEST_PREFIX}${TEST_NAME}")
   prepare_test()
 
   configurefilestosystemtest("systemtests" "tests/${TEST_NAME}" "*" @ONLY "")
-  string(CONCAT pythonpath
-  "${CMAKE_SOURCE_DIR}/core/src/plugins/filed/python/pyfiles:"
-  "${CMAKE_SOURCE_DIR}/core/src/plugins/stored/python/pyfiles:"
-  "${CMAKE_SOURCE_DIR}/core/src/plugins/dird/python/pyfiles:"
-  "${CMAKE_BINARY_DIR}/core/src/plugins/filed/pythonmodules:"
-  "${CMAKE_BINARY_DIR}/core/src/plugins/stored/pythonmodules:"
-  "${CMAKE_SOURCE_DIR}/core/src/plugins/dird/pythonmodules:"
-  "${CMAKE_CURRENT_SOURCE_DIR}/tests/${TEST_NAME}/python-modules"
+  string(
+    CONCAT pythonpath
+           "${CMAKE_SOURCE_DIR}/core/src/plugins/filed/python/pyfiles:"
+           "${CMAKE_SOURCE_DIR}/core/src/plugins/stored/python/pyfiles:"
+           "${CMAKE_SOURCE_DIR}/core/src/plugins/dird/python/pyfiles:"
+           "${CMAKE_BINARY_DIR}/core/src/plugins/filed/pythonmodules:"
+           "${CMAKE_BINARY_DIR}/core/src/plugins/stored/pythonmodules:"
+           "${CMAKE_BINARY_DIR}/core/src/plugins/dird/pythonmodules:"
+           "${CMAKE_CURRENT_SOURCE_DIR}/tests/${TEST_NAME}/python-modules"
   )
-
 
   configure_file("environment.in" "tests/${TEST_NAME}/environment" @ONLY)
 
@@ -741,10 +739,7 @@ set(WEBUI_TEST_PREFIX "webui:")
 # webui specific settings
 if(ENABLE_WEBUI_SELENIUM_TEST)
   foreach(TEST_NAME ${WEBUI_SELENIUM_TESTS})
-    message(
-      STATUS
-        "Configuring test: ${WEBUI_TEST_PREFIX}${TEST_NAME}"
-    )
+    message(STATUS "Configuring test: ${WEBUI_TEST_PREFIX}${TEST_NAME}")
 
     prepare_test()
     prepare_testdir_for_daemon_run()
@@ -796,27 +791,26 @@ if(ENABLE_WEBUI_SELENIUM_TEST)
       COMMAND ${tests_dir}/${TEST_NAME}/testrunner
       WORKING_DIRECTORY ${tests_dir}/${TEST_NAME}
     )
-    set_tests_properties(${WEBUI_TEST_PREFIX}${TEST_NAME} PROPERTIES TIMEOUT 180)
+    set_tests_properties(
+      ${WEBUI_TEST_PREFIX}${TEST_NAME} PROPERTIES TIMEOUT 180
+    )
     math(EXPR BASEPORT "${BASEPORT} + 10")
   endforeach()
 endif()
 
 foreach(TEST_NAME_DISABLED ${SYSTEM_TESTS_DISABLED})
   checkforenabledanddisabledlistentry(${TEST_NAME_DISABLED})
-  add_test(
-    NAME ${SYSTEMTEST_PREFIX}${TEST_NAME_DISABLED}
-    COMMAND empty_command
-  )
+  add_test(NAME ${SYSTEMTEST_PREFIX}${TEST_NAME_DISABLED} COMMAND empty_command)
   set_tests_properties(
-    ${SYSTEMTEST_PREFIX}${TEST_NAME_DISABLED}
-    PROPERTIES DISABLED true
+    ${SYSTEMTEST_PREFIX}${TEST_NAME_DISABLED} PROPERTIES DISABLED true
   )
-  message(
-    STATUS
-      "Disabled test: ${SYSTEMTEST_PREFIX}${TEST_NAME_DISABLED}"
-  )
+  message(STATUS "Disabled test: ${SYSTEMTEST_PREFIX}${TEST_NAME_DISABLED}")
 endforeach()
 
-
-configure_file("CTestCustom.cmake.in" "${CMAKE_BINARY_DIR}/CTestCustom.cmake" @ONLY)
-configure_file("ctest_custom_pretest.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/ctest_custom_pretest.sh" @ONLY)
+configure_file(
+  "CTestCustom.cmake.in" "${CMAKE_BINARY_DIR}/CTestCustom.cmake" @ONLY
+)
+configure_file(
+  "ctest_custom_pretest.sh.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/ctest_custom_pretest.sh" @ONLY
+)
