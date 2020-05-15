@@ -171,6 +171,13 @@ macro(handle_python_plugin_modules test_name)
     )
   endif()
 
+  if(${test_name} STREQUAL python-fd-plugin-local-fileset-rop-test)
+    list(APPEND FD_PYMODULES_TO_LINK_TO_SRC bareos-fd-local-fileset.py
+                BareosFdPluginLocalFileset.py
+    )
+  endif()
+
+
   if(${test_name} STREQUAL python-fd-plugin-postgres-test)
         list(APPEND FD_PYMODULES_TO_LINK_TO_SRC bareos-fd-postgres.py 
                 BareosFdPluginLocalFileset.py 
@@ -679,6 +686,13 @@ if(TARGET python-fd)
 else()
   list(APPEND SYSTEM_TESTS_DISABLED "python-fd-plugin-local-fileset-test")
 endif()
+
+if(TARGET python-fd)
+  list(APPEND SYSTEM_TESTS "python-fd-plugin-local-fileset-rop-test")
+else()
+  list(APPEND SYSTEM_TESTS_DISABLED "python-fd-plugin-local-fileset-rop-test")
+endif()
+
 
 if(TARGET python-fd)
   list(APPEND SYSTEM_TESTS "python-fd-plugin-postgres-test")
