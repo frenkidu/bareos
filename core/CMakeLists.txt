@@ -421,9 +421,9 @@ include(BareosDetermineHaveLowLevelScsiInterface)
 
 include(acltypes)
 
-include_directories(SYSTEM ${Python_INCLUDE_DIRS})
+# include_directories(SYSTEM ${Python_INCLUDE_DIRS})
 
-include_directories(SYSTEM ${Python_INCLUDE_PATH})
+# include_directories(SYSTEM ${Python_INCLUDE_PATH})
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
